@@ -87,14 +87,6 @@ def main():
         st.stop()
     vectordb = llm.load_chroma_db()
 
-# Set up and run this Streamlit App
-
-    # region <--------- Streamlit App Configuration --------->
-    st.set_page_config(
-        layout="centered",
-        page_title="My Streamlit App"
-    )
-    # endregion <--------- Streamlit App Configuration --------->
 
     st.title("Streamlit App")
     

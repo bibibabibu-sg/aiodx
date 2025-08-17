@@ -10,6 +10,11 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 #from dotenv import load_dotenv  
 
+
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
 #load_dotenv()
 
 

@@ -83,7 +83,7 @@ def main():
         }
     ) 
   
-      if not check_password():  
+    if not check_password():  
         st.stop()
     vectordb = llm.load_chroma_db()
 

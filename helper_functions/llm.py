@@ -7,7 +7,7 @@ from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
-from dotenv import load_dotenv  
+#from dotenv import load_dotenv  
 
 #load_dotenv()
 

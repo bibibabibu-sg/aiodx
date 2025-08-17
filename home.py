@@ -70,8 +70,8 @@ st.title("Government Open Data Explorer")
 
 
 def main():
-    st.set_page_config(page_title=None, 
-                       page_icon=None, layout=None, initial_sidebar_state=None, menu_items=None)
+    st.set_page_config(page_title="Open Data Explorer App", 
+                       page_icon=None, layout="centered", initial_sidebar_state=None, menu_items=None)
     if not check_password():  
         st.stop()
     vectordb = llm.load_chroma_db()

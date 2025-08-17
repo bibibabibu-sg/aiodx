@@ -9,7 +9,7 @@ from langchain_community.vectorstores import Chroma
 from langchain_openai import OpenAIEmbeddings
 from langchain_openai import ChatOpenAI
 #from dotenv import load_dotenv  
-
+CHROMA_DB_DIR = os.path.abspath("./chroma_db")
 
 __import__('pysqlite3')
 import sys
@@ -83,26 +83,42 @@ def count_tokens_from_message(messages):
 #     )
 #     return vectordb
 
-def load_chroma_db():
-    """Load existing ChromaDB vector store with updated imports"""
-    try:
-        # Initialize embeddings
-        embeddings = OpenAIEmbeddings(
+# def load_chroma_db():
+#     """Load existing ChromaDB vector store with updated imports"""
+#     try:
+#         # Initialize embeddings
+#         embeddings = OpenAIEmbeddings(
+#             model='text-embedding-3-small',
+#             openai_api_key=st.secrets["OPENAI_API_KEY"]
+#         )
+        
+#         # Load ChromaDB
+#         vectordb = Chroma(
+#             persist_directory="./chroma_db",
+#             embedding_function=embeddings
+#         )
+        
+#         # Verify collection exists
+#         if not vectordb._collection.count():
+#             st.warning("ChromaDB collection is empty")
+        
+#         return vectordb
+#     except Exception as e:
+#         st.error(f"Failed to load ChromaDB: {str(e)}")
+#         return None
+    
+def load_chroma_db(collection_name: str = "my_documents") -> Chroma:
+    """Load existing ChromaDB collection"""
+    vectordb = Chroma(
+        persist_directory=CHROMA_DB_DIR,
+        embedding_function=OpenAIEmbeddings(
             model='text-embedding-3-small',
             openai_api_key=st.secrets["OPENAI_API_KEY"]
-        )
-        
-        # Load ChromaDB
-        vectordb = Chroma(
-            persist_directory="./chroma_db",
-            embedding_function=embeddings
-        )
-        
-        # Verify collection exists
-        if not vectordb._collection.count():
-            st.warning("ChromaDB collection is empty")
-        
-        return vectordb
-    except Exception as e:
-        st.error(f"Failed to load ChromaDB: {str(e)}")
-        return None
+        ),
+        collection_name=collection_name  # Must match creation name
+    )
+    
+    if vectordb._collection.count() == 0:
+        raise ValueError("Loaded empty collection - may be wrong collection name")
+    
+    return vectordb

@@ -73,12 +73,36 @@ def count_tokens_from_message(messages):
     return len(encoding.encode(value))
 
 
+# def load_chroma_db():
+#     """Load existing ChromaDB vector store with updated imports"""
+
+#     # Load ChromaDB with new import
+#     vectordb = Chroma(
+#         persist_directory="./chroma_db",
+#         embedding_function=OpenAIEmbeddings(model='text-embedding-3-small')
+#     )
+#     return vectordb
+
 def load_chroma_db():
     """Load existing ChromaDB vector store with updated imports"""
-
-    # Load ChromaDB with new import
-    vectordb = Chroma(
-        persist_directory="./chroma_db",
-        embedding_function=OpenAIEmbeddings(model='text-embedding-3-small')
-    )
-    return vectordb
+    try:
+        # Initialize embeddings
+        embeddings = OpenAIEmbeddings(
+            model='text-embedding-3-small',
+            openai_api_key=st.secrets["OPENAI_API_KEY"]
+        )
+        
+        # Load ChromaDB
+        vectordb = Chroma(
+            persist_directory="./chroma_db",
+            embedding_function=embeddings
+        )
+        
+        # Verify collection exists
+        if not vectordb._collection.count():
+            st.warning("ChromaDB collection is empty")
+        
+        return vectordb
+    except Exception as e:
+        st.error(f"Failed to load ChromaDB: {str(e)}")
+        return None
